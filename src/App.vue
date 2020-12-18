@@ -1,19 +1,67 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Home :items="items"></Home>
+    <Swiper></Swiper>
+    <!-- <carousel
+      :autoplay="true"
+      :duration="3000"
+      :initial="1"
+      :hasDot="true"
+      :hasDirector="true"
+    >
+      <car-itme v-for="(item, index) of carData" :key="index">
+        <img :src="require('./assets/img/')" alt="" />
+      </car-itme>
+    </carousel> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Home from "./components/Home.vue";
+import Swiper from "./components/common/Swiper";
 
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      carData: [{}],
+      items: [
+        {
+          name: "IT互联网",
+          child: [
+            {
+              name: "编辑语言",
+              child: [
+                { name: "java" },
+                { name: "c#/ .net" },
+                { name: "python" },
+              ],
+            },
+            {
+              name: "前端开发",
+              child: [{ name: "jq" }, { name: "vue " }, { name: "react " }],
+            },
+            {
+              name: "移动开发",
+              child: [{ name: " android开发" }, { name: "IOS开发" }],
+            },
+            {
+              name: "游戏开发",
+              child: [
+                { name: " phaser游戏开发" },
+                { name: "webGL游戏开发", child: [{ name: "3D游戏" }] },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    Home,
+    Swiper,
+  },
+};
 </script>
 
 <style>
