@@ -1,196 +1,58 @@
-body,
-html {
-    border: 0;
-    font: 12px/1.5 "Microsoft Yahei", arial, "瀹嬩綋";
-    color: #000;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
+@import "./normalize.css";
+
+/*:root -> 获取根元素html*/
+:root {
+  --color-text: #666;
+  --color-high-text: #ff5777;
+  --color-tint: #ff8198;
+  --color-background: #fff;
+  --font-size: 14px;
+  --line-height: 1.5;
 }
 
-article,
-aside,
-audio,
-canvas,
-caption,
-details,
-div,
-figure,
-footer,
-header,
-hgroup,
-iframe,
-img,
-mark,
-menu,
-nav,
-object,
-section,
-span,
-summary,
-table,
-tbody,
-td,
-tfoot,
-thead,
-tr,
-video {
-    border: 0;
-    margin: 0;
-    padding: 0;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-a,
-abbr,
-address,
-b,
-blockquote,
-cit,
-code,
-dd,
-del,
-dfn,
-dl,
-dt,
-em,
-fieldset,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-i,
-ins,
-label,
-legend,
-li,
-ol,
-p,
-pre,
-q,
-samp,
-small,
-strong,
-sub,
-sup,
-ul {
-    border: 0;
-    vertical-align: baseline;
-    margin: 0;
-    padding: 0;
-}
-
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-li {
-    list-style: none;
+body {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  user-select: none;
+  /* 禁止用户鼠标在页面上选中文字/图片等 */
+  -webkit-tap-highlight-color: transparent;
+  /* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
+  background: var(--color-background);
+  color: var(--color-text);
+  /* rem vw/vh */
+  width: 100vw;
 }
 
 a {
-    /* display: block; */
-    text-decoration: none;
-    outline: 0;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-}
-
-a img {
-    border: 0;
-}
-
-#zt img {
-    /* vertical-align: bottom; */
-    display: block;
-}
-
-:focus {
-    outline: 0;
-}
-
-textarea {
-    resize: none;
-    -webkit-appearance: none;
-}
-
-input {
-    -webkit-appearance: none;
-    border: none;
-}
-
-select {
-    -webkit-appearance: none;
-    background-color: #fff;
+  color: var(--color-text);
+  text-decoration: none;
 }
 
 
-
-button,
-input,
-select,
-textarea {
-    outline: 0;
-    color: #555;
-    font-size: 16px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    border-radius: 4px;
-    border: solid 1px #ccc;
-    padding: 5px;
-    display: inline-block;
+.clear-fix::after {
+  clear: both;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
 
-input[type="submit"] {
-    -webkit-appearance: none;
+.clear-fix {
+  zoom: 1;
 }
 
-#ios {
-    width: 100%;
-    background: #f71010;
-    color: #fff;
-    font-size: 14px;
-    line-height: 25px;
-    text-align: center;
+.left {
+  float: left;
 }
 
-.new_pc .zt_share {
-    width: 60px;
-    height: 30px;
-    background: #369;
-    line-height: 30px;
-    text-align: center;
-    position: fixed;
-    top: 200px;
-    right: 0;
-    color: #fff;
-    cursor: pointer;
-}
-
-.sharev2_dlg_mask {
-    z-index: 10000 !important;
-}
-
-.sharev2_dlg {
-    z-index: 10001 !important;
-}
-
-.text-indent {
-    text-indent: 2em;
-}
-
-.flex_content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.hide {
-    display: none;
+.right {
+  float: right;
 }
