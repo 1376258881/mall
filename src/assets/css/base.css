@@ -1,0 +1,37 @@
+@import "./normalize.css";
+
+:root {
+  --color-text: #666;
+  --color-heigh-text: #ff5777;
+  --color-tint: #ff8198;
+  --color-background: #fff;
+  --font-size: 14px;
+  --line-height: 1.5;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  user-select: none;
+  -webkit-tap-highlight-color: none;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+.clear-fix {
+  zoom: 1;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
