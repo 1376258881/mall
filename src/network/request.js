@@ -2,7 +2,7 @@ import axios from "axios";
 export function request(config) {
     //1.创建axios实例
     const instance = axios.create({
-        baseURL: '',
+        baseURL: 'https://api-hmugo-web.itheima.net/api/public/v1',
         timeout: 5000
     })
 

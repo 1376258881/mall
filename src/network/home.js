@@ -4,18 +4,20 @@ import {
     request
 } from './request';
 
-export function getHomeMultidata() {
+export function getHomeSwiperdata() {
     return request({
-        url: ''
+        url: '/home/swiperdata'
     })
 }
 
-export function getHomeGoods() {
+export function getHomeCatitems() {
     return request({
-        url: '/home/data',
-        params: {
-            type,
-            page
-        }
+        url: '/home/catitems',
+    })
+}
+
+export function getHomeFloordata() {
+    return request({
+        url: '/home/floordata',
     })
 }
