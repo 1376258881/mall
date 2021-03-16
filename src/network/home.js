@@ -21,3 +21,16 @@ export function getHomeFloordata() {
         url: '/home/floordata',
     })
 }
+
+export function getHomeGoods(cid, pagenum, pagesize, query) {
+    return request({
+        url: '/goods/search',
+        params: {
+            cid,
+            query,
+            pagenum,
+            pagesize
+        }
+
+    })
+}
