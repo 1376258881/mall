@@ -1,15 +1,16 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"> <div slot="center">首页</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"> </recommend-view>
-    <footer-view :floordata="floordata">123</footer-view>
-    <tab-control
-      :titles="[{ title: '流行' }, { title: '精选' }, { title: '新款' }]"
-      @itemClick="tabClick"
-    ></tab-control>
-
-    <goods-list :goods="showGoods"></goods-list>
+    <scroll class="content">
+      <home-swiper :banners="banners"></home-swiper>
+      <recommend-view :recommends="recommends"> </recommend-view>
+      <footer-view :floordata="floordata">123</footer-view>
+      <tab-control
+        :titles="[{ title: '流行' }, { title: '精选' }, { title: '新款' }]"
+        @itemClick="tabClick"
+      ></tab-control>
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import RecommendView from "./childComps/RecommendView.vue";
 import FooterView from "./childComps/FooterView";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
+import Scroll from "components/common/scroll/Scroll.vue";
 
 export default {
   name: "Home",
@@ -41,6 +43,7 @@ export default {
     FooterView,
     TabControl,
     GoodsList,
+    Scroll,
   },
   props: {},
   data() {
@@ -77,9 +80,8 @@ export default {
     getHomeGoods(type, numpage) {
       const page = this.goods[type + ""].page + 1;
       getHomeGoods(type, page, 20).then((res) => {
-        console.log(res.message);
         this.goods[type + ""].list.push(...res.message.goods);
-        // this.goods[type + ""].page += 1;
+        this.goods[type + ""].page += 1;
       });
     },
     tabClick(index) {
@@ -91,9 +93,7 @@ export default {
       return this.goods[this.currentType].list;
     },
   },
-  mounted() {
-    //this.currentType = Object.keys(this.goods)[index]就可以
-  },
+  mounted() {},
 };
 </script>
 
@@ -111,5 +111,13 @@ export default {
   right: 0;
   height: 44px;
   z-index: 9;
+}
+.content {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 44px;
+  bottom: 49px;
+  overflow: hidden;
 }
 </style>
