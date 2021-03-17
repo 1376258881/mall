@@ -1,7 +1,14 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"> <div slot="center">首页</div></nav-bar>
-    <scroll class="content">
+    <scroll
+      class="content"
+      ref="scroll"
+      @scroll="contentScrollTop"
+      :probeType="3"
+      :pullUpLoad="true"
+      @loadMore="loadMore"
+    >
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"> </recommend-view>
       <footer-view :floordata="floordata">123</footer-view>
@@ -11,6 +18,7 @@
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
+    <back-top @click.native="backClick" v-show="isBackShow"></back-top>
   </div>
 </template>
 
@@ -33,6 +41,7 @@ import FooterView from "./childComps/FooterView";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
 import Scroll from "components/common/scroll/Scroll.vue";
+import BackTop from "components/content/backTop/BackTop.vue";
 
 export default {
   name: "Home",
@@ -44,6 +53,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
+    BackTop,
   },
   props: {},
   data() {
@@ -52,11 +62,12 @@ export default {
       recommends: [],
       floordata: [],
       goods: {
-        939: { page: 0, list: [] },
         926: { page: 0, list: [] },
+        939: { page: 0, list: [] },
         942: { page: 0, list: [] },
       },
-      currentType: "939",
+      isBackShow: false,
+      currentType: "926",
     };
   },
   created() {
@@ -70,22 +81,35 @@ export default {
       this.floordata = [...res.message];
     });
     //流行
-    this.getHomeGoods(939, 1);
-    //精选
     this.getHomeGoods(926, 1);
+    //精选
+    this.getHomeGoods(939, 1);
     //新款
     this.getHomeGoods(942, 1);
   },
   methods: {
     getHomeGoods(type, numpage) {
       const page = this.goods[type + ""].page + 1;
-      getHomeGoods(type, page, 20).then((res) => {
+      getHomeGoods(type, page, 10).then((res) => {
         this.goods[type + ""].list.push(...res.message.goods);
         this.goods[type + ""].page += 1;
       });
     },
     tabClick(index) {
       this.currentType = Object.keys(this.goods)[index];
+    },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0);
+    },
+    contentScrollTop(position) {
+      this.isBackShow = -position.y > 1000;
+    },
+    loadMore() {
+      this.getHomeGoods(this.currentType, 1);
+      this.$refs.scroll.refresh();
+      this.$refs.scroll.finishPullUp();
+      //下拉加载更多
+      console.log("下拉加载更多");
     },
   },
   computed: {
@@ -113,11 +137,7 @@ export default {
   z-index: 9;
 }
 .content {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 44px;
-  bottom: 49px;
+  height: calc(100vh - 93px);
   overflow: hidden;
 }
 </style>
