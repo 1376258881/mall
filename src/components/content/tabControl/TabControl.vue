@@ -45,10 +45,14 @@ export default {
   font-size: 25px;
   height: 40px;
   line-height: 40px;
-  position: sticky;
+  /* position: sticky;
   top: 44px;
-  z-index: 9;
+  z-index: 9; */
   background-color: #fff;
+  padding: 20px 0;
+  box-sizing: content-box;
+  position: relative;
+  z-index: 11;
 }
 .tab-control-item {
   flex: 1;

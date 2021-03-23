@@ -1,7 +1,7 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick(goodsItem.goods_id)">
     <div class="goods-img">
-      <img :src="goodsItem.goods_small_logo" alt="" />
+      <img :src="goodsItem.goods_small_logo" alt="" @load="imageLoad" />
     </div>
     <div class="goods-info">
       <p>{{ goodsItem.goods_name }}</p>
@@ -25,6 +25,15 @@ export default {
   components: {},
   data() {
     return {};
+  },
+  methods: {
+    imageLoad() {
+      this.$bus.$emit("ItemImageLoad");
+    },
+    itemClick(goods_id) {
+      console.log(goods_id);
+      this.$router.push({ path: "detail", query: { goods_id } });
+    },
   },
 };
 </script>

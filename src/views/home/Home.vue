@@ -1,6 +1,13 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"> <div slot="center">首页</div></nav-bar>
+    <tab-control
+      :titles="[{ title: '流行' }, { title: '精选' }, { title: '新款' }]"
+      @itemClick="tabClick"
+      ref="tabControl1"
+      v-show="isFixed"
+      class=""
+    ></tab-control>
     <scroll
       class="content"
       ref="scroll"
@@ -15,6 +22,7 @@
       <tab-control
         :titles="[{ title: '流行' }, { title: '精选' }, { title: '新款' }]"
         @itemClick="tabClick"
+        ref="tabControl2"
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
@@ -43,6 +51,8 @@ import GoodsList from "components/content/goods/GoodsList.vue";
 import Scroll from "components/common/scroll/Scroll.vue";
 import BackTop from "components/content/backTop/BackTop.vue";
 
+//功能函数
+import { debounce } from "common/utils";
 export default {
   name: "Home",
   components: {
@@ -68,6 +78,8 @@ export default {
       },
       isBackShow: false,
       currentType: "926",
+      isFixed: false,
+      saveY: 0,
     };
   },
   created() {
@@ -93,23 +105,34 @@ export default {
       getHomeGoods(type, page, 10).then((res) => {
         this.goods[type + ""].list.push(...res.message.goods);
         this.goods[type + ""].page += 1;
+        //下拉加载更多
+        this.$refs.scroll.finishPullUp();
       });
     },
     tabClick(index) {
       this.currentType = Object.keys(this.goods)[index];
+      this.$refs.tabControl1.courrentIndex = index;
+      this.$refs.tabControl2.courrentIndex = index;
+      //滚动到元素位置
+      this.$refs.scroll.scroll.scrollToElement(this.$refs.tabControl2.$el, 200);
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScrollTop(position) {
       this.isBackShow = -position.y > 1000;
+      let tabControlTop = this.$refs.tabControl2.$el.getBoundingClientRect()
+        .top;
+      this.isFixed = tabControlTop <= 44;
     },
     loadMore() {
       this.getHomeGoods(this.currentType, 1);
-      this.$refs.scroll.refresh();
-      this.$refs.scroll.finishPullUp();
-      //下拉加载更多
-      console.log("下拉加载更多");
+    },
+    ItemImageLoad() {
+      const REFRESH = debounce(this.$refs.scroll.refresh, 200);
+      this.$bus.$on("ItemImageLoad", () => {
+        REFRESH();
+      });
     },
   },
   computed: {
@@ -117,7 +140,18 @@ export default {
       return this.goods[this.currentType].list;
     },
   },
-  mounted() {},
+  mounted() {
+    this.ItemImageLoad();
+  },
+  activated() {
+    //创建时跳到获取保留的位置,并刷新下页面
+    this.$refs.scroll.scrollTo(0, this.saveY, 1);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    //离开时保留滚动位置
+    this.saveY = this.$refs.scroll.getScrollY();
+  },
 };
 </script>
 
@@ -137,7 +171,14 @@ export default {
   z-index: 9;
 }
 .content {
-  height: calc(100vh - 93px);
+  /* height: calc(100vh - 93px); */
+  overflow: hidden;
+  position: fixed;
+  top: 44px;
+  bottom: 49px;
+  z-index: 10;
+  left: 0;
+  right: 0;
   overflow: hidden;
 }
 </style>

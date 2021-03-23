@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container"></div>
+    <div class="detail"></div>
   </div>
 </template>
 
@@ -10,9 +10,14 @@ export default {
   components: {},
   props: {},
   data() {
-    return {};
+    return {
+      iid: null,
+    };
   },
-  created() {},
+  created() {
+    console.log(this.$route.query);
+    // this.iid = this.$route
+  },
   mounted() {},
   activited() {},
   update() {},
@@ -24,5 +29,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
