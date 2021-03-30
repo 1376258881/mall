@@ -6,7 +6,6 @@
       @itemClick="tabClick"
       ref="tabControl1"
       v-show="isFixed"
-      class=""
     ></tab-control>
     <scroll
       class="content"
@@ -18,7 +17,7 @@
     >
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"> </recommend-view>
-      <footer-view :floordata="floordata">123</footer-view>
+      <footer-view :floordata="floordata"></footer-view>
       <tab-control
         :titles="[{ title: '流行' }, { title: '精选' }, { title: '新款' }]"
         @itemClick="tabClick"
@@ -53,6 +52,8 @@ import BackTop from "components/content/backTop/BackTop.vue";
 
 //功能函数
 import { debounce } from "common/utils";
+//混入
+import { itemListenerMixin } from "common/mixin";
 export default {
   name: "Home",
   components: {
@@ -66,6 +67,7 @@ export default {
     BackTop,
   },
   props: {},
+  mixins: [itemListenerMixin],
   data() {
     return {
       banners: [],
@@ -111,37 +113,37 @@ export default {
     },
     tabClick(index) {
       this.currentType = Object.keys(this.goods)[index];
+      //两个导航选中项都更改
       this.$refs.tabControl1.courrentIndex = index;
       this.$refs.tabControl2.courrentIndex = index;
       //滚动到元素位置
       this.$refs.scroll.scroll.scrollToElement(this.$refs.tabControl2.$el, 200);
     },
     backClick() {
+      //返回顶部
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScrollTop(position) {
+      //返回顶部 图标
       this.isBackShow = -position.y > 1000;
+      //吸顶
       let tabControlTop = this.$refs.tabControl2.$el.getBoundingClientRect()
         .top;
       this.isFixed = tabControlTop <= 44;
     },
     loadMore() {
+      //加载更多
       this.getHomeGoods(this.currentType, 1);
-    },
-    ItemImageLoad() {
-      const REFRESH = debounce(this.$refs.scroll.refresh, 200);
-      this.$bus.$on("ItemImageLoad", () => {
-        REFRESH();
-      });
     },
   },
   computed: {
     showGoods() {
+      //this.currentType变化  ,展示商品列表切换
       return this.goods[this.currentType].list;
     },
   },
   mounted() {
-    this.ItemImageLoad();
+    // this.ItemImageLoad();
   },
   activated() {
     //创建时跳到获取保留的位置,并刷新下页面
@@ -151,6 +153,7 @@ export default {
   deactivated() {
     //离开时保留滚动位置
     this.saveY = this.$refs.scroll.getScrollY();
+    this.$bus.$off("itemImageLoad", this.itemImageListener);
   },
 };
 </script>
@@ -171,6 +174,7 @@ export default {
   z-index: 9;
 }
 .content {
+  /**scroll组件必须要设定高度 */
   /* height: calc(100vh - 93px); */
   overflow: hidden;
   position: fixed;

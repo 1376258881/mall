@@ -7,6 +7,7 @@
 </template>
 
 <script>
+//scroll组件必须要设定高度
 import BScroll from "better-scroll";
 import { debounce } from "common/utils";
 export default {
@@ -51,7 +52,6 @@ export default {
     this.scroll.on("pullingUp", () => {
       this.$emit("loadMore", "上啦加载更多");
     });
-    console.log();
   },
   methods: {
     scrollTo(x, y, timer = 300) {
@@ -61,11 +61,11 @@ export default {
       this.scroll && this.scroll.finishPullUp(); //事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则上拉事件只会执行一次
     },
     refresh() {
+      console.log(123);
       //刷新
       this.scroll && this.scroll.refresh();
     },
     getScrollY() {
-      // this.
       return this.scroll ? this.scroll.y : 0;
     },
   },
