@@ -29,7 +29,7 @@ export default {
         }
         this.$emit("imgLoad");
         num++;
-      }, 100);
+      }, 120);
     });
   },
   watch: {},

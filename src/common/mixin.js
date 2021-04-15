@@ -16,6 +16,19 @@ export const itemListenerMixin = {
             this.refresh();
         };
         this.$bus.$on("ItemImageLoad", this.itemImgListener);
-        console.log('我是混入');
     }
+}
+
+export const componentLoad = {
+    data() {
+        return {
+            isRouterAlive: true,
+        }
+    },
+    methods: {
+        reload() {
+            this.isRouterAlive = false;
+            this.$nextTick(() => (this.isRouterAlive = true));
+        },
+    },
 }

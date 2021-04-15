@@ -61,7 +61,6 @@ export default {
       this.scroll && this.scroll.finishPullUp(); //事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则上拉事件只会执行一次
     },
     refresh() {
-      console.log(123);
       //刷新
       this.scroll && this.scroll.refresh();
     },
