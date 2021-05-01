@@ -54,6 +54,7 @@ import BackTop from "components/content/backTop/BackTop.vue";
 import { debounce } from "common/utils";
 //混入
 import { itemListenerMixin } from "common/mixin";
+import { BACK_POSITION } from "common/const";
 export default {
   name: "Home",
   components: {
@@ -125,7 +126,7 @@ export default {
     },
     contentScrollTop(position) {
       //返回顶部 图标
-      this.isBackShow = -position.y > 1000;
+      this.isBackShow = -position.y > BACK_POSITION;
       //吸顶
       let tabControlTop = this.$refs.tabControl2.$el.getBoundingClientRect()
         .top;

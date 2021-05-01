@@ -20,6 +20,8 @@
       ></detail-shop-info>
       <goods-list :goods="goodList" ref="goods" />
     </scroll>
+    <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
+    <back-top @click.native="backClick" v-show="isBackShow"></back-top>
   </div>
 </template>
 
@@ -34,10 +36,13 @@ import DetailBaseInfo from "./childComps/DetailBaseInfo.vue";
 import DetailShopInfo from "./childComps/DetailShopInfo.vue";
 import Scroll from "components/common/scroll/Scroll.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
+import DetailBottomBar from "./childComps/DetailBottomBar";
+import BackTop from "components/content/backTop/BackTop.vue";
 //功能函数
 import { debounce } from "common/utils";
 //混入
 import { itemListenerMixin, componentLoad } from "common/mixin";
+import { BACK_POSITION } from "common/const";
 export default {
   name: "Detail",
   components: {
@@ -47,6 +52,8 @@ export default {
     DetailShopInfo,
     Scroll,
     GoodsList,
+    DetailBottomBar,
+    BackTop,
   },
   props: {},
   mixins: [itemListenerMixin],
@@ -57,8 +64,10 @@ export default {
       imgSwiper: [],
       goods: {},
       goodList: [],
+      themeTopEles: [],
       themeTopYs: [],
       currentIndex: 0,
+      isBackShow: false,
       // getThemeTopY: null,
     };
   },
@@ -94,13 +103,14 @@ export default {
       });
     },
     titleClick(index) {
-      this.themeTopYs = [
-        this.$refs.swiper.$el.offsetTop,
-        this.$refs.parmas.$el.offsetTop,
-        this.$refs.shopImg.$el.offsetTop,
-        this.$refs.goods.$el.offsetTop,
+      this.themeTopEles = [
+        this.$refs.swiper.$el,
+        this.$refs.parmas.$el,
+        this.$refs.shopImg.$el,
+        this.$refs.goods.$el,
       ];
-      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 300);
+      this.$refs.scroll.scroll.scrollToElement(this.themeTopEles[index], 200);
+      // this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 300);
     },
     contentScroll(position) {
       this.themeTopYs = [
@@ -111,30 +121,43 @@ export default {
       ];
 
       let positionY = -position.y;
+      this.themeTopYs.push(Number.MAX_VALUE);
       let length = this.themeTopYs.length;
-      for (let i = 0; i < length; i++) {
-        // if (
-        //   this.currentIndex !== i &&
-        //   positionY >= this.themeTopYs[i] &&
-        //   positionY < this.themeTopYs[i + 1]
-        // ) {
-        //   this.currentIndex = i;
-        //   // console.log(this.currentIndex);
-        //   this.$refs.nav.currentIndex = this.currentIndex;
-        // }
-
+      for (let i = 0; i < length - 1; i++) {
         if (
           this.currentIndex !== i &&
-          ((i < length - 1 &&
-            positionY >= this.themeTopYs[i] &&
-            positionY < this.themeTopYs[i + 1]) ||
-            (i === length - 1 && positionY >= this.themeTopYs[i]))
+          positionY >= this.themeTopYs[i] &&
+          positionY < this.themeTopYs[i + 1]
         ) {
           this.currentIndex = i;
-          console.log(i);
           this.$refs.nav.currentIndex = this.currentIndex;
         }
       }
+      this.isBackShow = -position.y > BACK_POSITION;
+      // for (let i = 0; i < length; i++) {
+      //   if (
+      //     this.currentIndex !== i &&
+      //     ((i < length - 1 &&
+      //       positionY >= this.themeTopYs[i] &&
+      //       positionY < this.themeTopYs[i + 1]) ||
+      //       (i === length - 1 && positionY >= this.themeTopYs[i]))
+      //   ) {
+      //     this.currentIndex = i;
+      //     this.$refs.nav.currentIndex = this.currentIndex;
+      //   }
+      // }
+    },
+    backClick() {
+      //返回顶部
+      this.$refs.scroll.scrollTo(0, 0);
+    },
+    addToCart() {
+      const product = {};
+      product.goods_id = this.goods.goods_id;
+      product.title = this.goods.goods_name;
+      product.price = this.goods.goods_price;
+      product.image = this.imgSwiper[0].pics_big_url;
+      this.$store.dispatch("addCart", product);
     },
   },
   filter: {},
@@ -152,6 +175,7 @@ export default {
   position: relative;
   z-index: 10;
   background: #fff;
+  overflow: hidden;
 }
 .detail-nav-bar {
   position: relative;
@@ -159,7 +183,7 @@ export default {
   background: #fff;
 }
 .detail-content {
-  height: calc(100vh - 44px);
+  height: calc(100vh - 44px - 49px);
   overflow: hidden;
 }
 </style>
