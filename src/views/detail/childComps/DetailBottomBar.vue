@@ -31,7 +31,7 @@ export default {
     // SportBall,
   },
   methods: {
-    addToCart(event) {
+    addToCart() {
       // this.$refs.ball.run(event.target)
       this.$emit("addCart");
     },
