@@ -8,7 +8,7 @@
       <p>全选</p>
     </div>
     <div class="cart-bottom-center">合计:{{ price }}</div>
-    <div class="cart-bottom-right">去计算({{ count }})</div>
+    <div class="cart-bottom-right" @click="clacClick">去计算({{ count }})</div>
   </div>
 </template>
 
@@ -51,6 +51,11 @@ export default {
     checkClick() {
       let isSelectAll = this.isSelectAll;
       this.cartList.forEach((item) => (item.checked = !isSelectAll));
+    },
+    clacClick() {
+      if (!this.cartLength) {
+        this.$toast.show("请选择你需要结算的商品");
+      }
     },
   },
 };

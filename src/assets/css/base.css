@@ -10,6 +10,11 @@
   --line-height: 1.5;
 }
 
+* {
+  /*避免点击过快 fastclick 报错*/
+  touch-action: pan-y;
+}
+
 *,
 *::before,
 *::after {

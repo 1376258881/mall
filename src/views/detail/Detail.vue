@@ -36,13 +36,14 @@ import DetailBaseInfo from "./childComps/DetailBaseInfo.vue";
 import DetailShopInfo from "./childComps/DetailShopInfo.vue";
 import Scroll from "components/common/scroll/Scroll.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
-import DetailBottomBar from "./childComps/DetailBottomBar";
 import BackTop from "components/content/backTop/BackTop.vue";
+import DetailBottomBar from "./childComps/DetailBottomBar";
 //功能函数
 import { debounce } from "common/utils";
 //混入
 import { itemListenerMixin, componentLoad } from "common/mixin";
 import { BACK_POSITION } from "common/const";
+import { mapActions } from "vuex";
 export default {
   name: "Detail",
   components: {
@@ -87,6 +88,7 @@ export default {
     next();
   },
   methods: {
+    ...mapActions(["addCart"]),
     imgLoad() {
       this.$refs.scroll.refresh();
       //图片加载完后 , 获取元素
@@ -157,7 +159,10 @@ export default {
       product.title = this.goods.goods_name;
       product.price = this.goods.goods_price;
       product.image = this.imgSwiper[0].pics_big_url;
-      this.$store.dispatch("addCart", product);
+      this.addCart(product).then((res) => {
+        // console.log(this.$toast);
+        this.$toast.show(res, 1500);
+      });
     },
   },
   filter: {},
